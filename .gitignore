@@ -1,0 +1,8 @@
+#Local database
+db.sqlite3
+#Bytecode
+__pycache__/
+*.__pyc
+#Mac OS Junk
+.DS_Store
+__venv__/
