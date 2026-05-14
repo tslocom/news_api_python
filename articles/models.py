@@ -3,20 +3,29 @@ from django.contrib.auth.models import User
 
 class Publication(models.Model):
     class Meta:
-        db_table = 'Publication'
-    name = models.CharField(max_length=256)
+        db_table = 'publication'
+    name = models.CharField(max_length=256, unique=True)
     publication_link = models.URLField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+class UserPublication(models.Model):
+    class Meta:
+        db_table = 'user_publication'
+        constraints = [models.UniqueConstraint(fields=['user', 'publication'], name='unique_user_publications')]
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    publication = models.ForeignKey(Publication, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     
 class Tag(models.Model):
     class Meta:
-        db_table = 'Tag'
-    name = models.CharField(max_length=64, db_index=True)
+        db_table = 'tag'
+    name = models.CharField(max_length=64, db_index=True, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
 class UserTag(models.Model):
     class Meta:
-        db_table = 'User_Tag'
+        db_table = 'user_tag'
+        constraints = [models.UniqueConstraint(fields=['user', 'tag'], name='unique_user_tags')]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
     is_ignored = models.BooleanField(default=False)
@@ -24,10 +33,10 @@ class UserTag(models.Model):
 
 class Article(models.Model):
     class Meta:
-        db_table = 'Article'
+        db_table = 'article'
     title = models.CharField(max_length=256 , db_index=True)
     summary = models.TextField()
-    article_link = models.URLField()
+    link = models.URLField(unique=True)
     published_at = models.DateTimeField()
     publication = models.ForeignKey(Publication, on_delete=models.CASCADE)
     author = models.CharField(max_length=256, null=True, blank=True)
@@ -36,7 +45,8 @@ class Article(models.Model):
     
 class Bookmark(models.Model):
     class Meta:
-        db_table = 'Bookmark'
+        db_table = 'bookmark'
+        constraints = [models.UniqueConstraint(fields=['user', 'article'], name='unique_user_bookmarks')]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
