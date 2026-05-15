@@ -19,7 +19,7 @@ class UserPublication(models.Model):
 class Tag(models.Model):
     class Meta:
         db_table = 'tag'
-    name = models.CharField(max_length=64, db_index=True, unique=True)
+    name = models.CharField(max_length=128, db_index=True, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
 class UserTag(models.Model):

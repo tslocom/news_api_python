@@ -102,14 +102,14 @@ from django.db import connection
 #for x in rss_feeds:        #uncomment this if copying repo and using for yourself to initialize database with publications
 #    with connection.cursor() as cursor:
 #        data_values = [x['name'], x['url']]
-#        sql_string = "INSERT INTO PUBLICATION (name, publication_link, created_at) VALUES (%s, %s, CURRENT_TIMESTAMP)"
+#        sql_string = "INSERT IGNORE INTO publication (name, publication_link, created_at) VALUES (%s, %s, CURRENT_TIMESTAMP)"
 #        cursor.execute(sql_string, data_values)
 #        new_publisher_id = cursor.lastrowid
 #    publisher_feed = feedparser.parse(f"{x['url']}")
 
-with connection.cursor() as cursor:       #comment this while initializing publications, uncomment for scheduled regular rss feed scraping
-    cursor.execute("SELECT id, name, publication_link FROM publication")
-    rss_feeds = cursor.fetchall()
+#with connection.cursor() as cursor:       #comment this while initializing publications, uncomment for scheduled regular rss feed scraping
+#    cursor.execute("SELECT id, name, publication_link FROM publication")
+#    rss_feeds = cursor.fetchall()
 
 for x in rss_feeds:     #comment this while initializing publications, uncomment for scheduled regular rss feed scraping
     new_publisher_id = x[0]
@@ -126,7 +126,7 @@ for x in rss_feeds:     #comment this while initializing publications, uncomment
         with connection.cursor() as cursor:
             raw_summary = entry.get("summary", "")
             clean_summary = html.unescape(strip_tags(raw_summary))
-            sql_string = "INSERT INTO article (title, summary, link, published_at, publication_id, author, created_at) VALUES (%s, %s, %s, %s, %s, %s, CURRENT_TIMESTAMP)"
+            sql_string = "INSERT IGNORE INTO article (title, summary, link, published_at, publication_id, author, created_at) VALUES (%s, %s, %s, %s, %s, %s, CURRENT_TIMESTAMP)"
             
             data_values = [entry.get("title", ""), clean_summary, entry.get("link", ""), db_ready_date, new_publisher_id, entry.get("author", ""),]
             cursor.execute(sql_string, data_values)
@@ -134,7 +134,7 @@ for x in rss_feeds:     #comment this while initializing publications, uncomment
             new_article_id = cursor.lastrowid
             for tag in article_tags:
                 get_string = "SELECT id FROM tag WHERE tag.name = %s"
-                create_string = "INSERT INTO tag (name, created_at) VALUES (%s, CURRENT_TIMESTAMP)"
+                create_string = "INSERT IGNORE INTO tag (name, created_at) VALUES (%s, CURRENT_TIMESTAMP)"
                 
                 data_values = [tag.get("term", "").lower(),]
                 cursor.execute(get_string, data_values)
@@ -144,7 +144,7 @@ for x in rss_feeds:     #comment this while initializing publications, uncomment
                     new_tag_id = cursor.lastrowid
                 else:
                     new_tag_id = existing_tag[0]
-                junction_string = "INSERT OR IGNORE INTO article_tags (tag_id, article_id) VALUES (%s, %s)"
+                junction_string = "INSERT IGNORE INTO article_tags (tag_id, article_id) VALUES (%s, %s)"
                 junction_values = [new_tag_id, new_article_id]
                 cursor.execute(junction_string, junction_values)
                 

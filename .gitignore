@@ -1,8 +1,40 @@
+#Django Stuff
+*.log
+local_settings.py
+#Python Stuff
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
 #Local database
 db.sqlite3
+db.sqlite3-journal
 #Bytecode
 __pycache__/
 *.__pyc
 #Mac OS Junk
 .DS_Store
 __venv__/
+#Environment Variables
+.env
+# Distribution / packaging
+bin/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+
+# OS specific
+.DS_Store
+Thumbs.db
