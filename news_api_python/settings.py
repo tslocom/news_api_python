@@ -31,9 +31,9 @@ load_dotenv(dotenv_path=env_path)
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG')
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['newsapipython.up.railway.app', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['newsapipython-production.up.railway.app', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -141,5 +141,5 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "HTTP://localhost:5173",
+    "http://localhost:5173",
 ]
