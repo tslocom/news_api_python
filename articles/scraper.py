@@ -107,9 +107,9 @@ from django.db import connection
 #        new_publisher_id = cursor.lastrowid
 #    publisher_feed = feedparser.parse(f"{x['url']}")
 
-#with connection.cursor() as cursor:       #comment this while initializing publications, uncomment for scheduled regular rss feed scraping
-#    cursor.execute("SELECT id, name, publication_link FROM publication")
-#    rss_feeds = cursor.fetchall()
+with connection.cursor() as cursor:       #comment this while initializing publications, uncomment for scheduled regular rss feed scraping
+    cursor.execute("SELECT id, name, publication_link FROM publication")
+    rss_feeds = cursor.fetchall()
 
 for x in rss_feeds:     #comment this while initializing publications, uncomment for scheduled regular rss feed scraping
     new_publisher_id = x[0]
