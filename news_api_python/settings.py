@@ -139,9 +139,11 @@ STATIC_URL = 'static/'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "https://news-app-react-theta-six.vercel.app",
+    "https://www.echofreenews.com",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "https://news-app-react-theta-six.vercel.app",
+    "https://www.echofreenews.com"
 ]
